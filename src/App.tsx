@@ -1,26 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Dashboard } from './pages/Dashboard';
 
-function App() {
+import { TasksProvider } from './contexts/TasksContext';
+import { ToastContainer } from 'react-toastify';
+
+import { GlobalStyle } from './styles/global';
+import 'react-toastify/dist/ReactToastify.css';
+import { useEffect } from 'react';
+import { api } from './services/api';
+
+
+export function App() {
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleInteraction);
+  },[]);
+
+  const handleInteraction = () => {
+    const path = window.location.pathname;
+    
+    api.patch(`interactions`,{
+      path
+    });
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <TasksProvider>
+      <Dashboard />
+      <GlobalStyle />
+      <ToastContainer />
+    </TasksProvider>
   );
 }
-
-export default App;
